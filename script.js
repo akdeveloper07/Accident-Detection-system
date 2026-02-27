@@ -1,4 +1,129 @@
-// static/js/script.js
+// script.js - Add at the top
+
+// ===== WEBSOCKET CONNECTION =====
+let socket = null;
+
+function initWebSocket() {
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const wsUrl = `${protocol}//${window.location.host}/socket.io/?EIO=4&transport=websocket`;
+    
+    socket = io({
+        transports: ['websocket'],
+        upgrade: false,
+        reconnection: true,
+        reconnectionDelay: 1000,
+        reconnectionDelayMax: 5000,
+        reconnectionAttempts: 5
+    });
+    
+    socket.on('connect', () => {
+        console.log('✅ Connected to server');
+        updateConnectionStatus(true);
+        showNotification('Connected to server', 'success');
+        
+        // Request initial data
+        socket.emit('request_stats');
+        socket.emit('request_alerts');
+    });
+    
+    socket.on('disconnect', () => {
+        console.log('❌ Disconnected from server');
+        updateConnectionStatus(false);
+        showNotification('Lost connection to server', 'error');
+    });
+    
+    socket.on('connect_error', (error) => {
+        console.error('Connection error:', error);
+        updateConnectionStatus(false);
+    });
+    
+    socket.on('accident_alert', (data) => {
+        console.log('🚨 Accident Alert:', data);
+        handleAccidentAlert(data);
+    });
+    
+    socket.on('new_detection', (data) => {
+        console.log('🔍 New Detection:', data);
+        updateDetectionMetrics(data);
+    });
+    
+    socket.on('stats_update', (data) => {
+        console.log('📊 Stats Update:', data);
+        updateDashboardStats(data);
+    });
+    
+    socket.on('alerts_update', (data) => {
+        console.log('📋 Alerts Update:', data);
+        updateAlertsList(data.alerts);
+    });
+    
+    socket.on('celebration', (data) => {
+        if (data.type === 'confetti') {
+            triggerConfetti();
+        }
+    });
+    
+    socket.on('client_count', (data) => {
+        document.getElementById('activeUsers')?.textContent = data.count;
+    });
+}
+
+// Update connection status
+function updateConnectionStatus(connected) {
+    const indicator = document.querySelector('.connection-status .dot');
+    const text = document.getElementById('connectionText');
+    
+    if (indicator) {
+        indicator.className = connected ? 'dot connected' : 'dot disconnected';
+    }
+    if (text) {
+        text.textContent = connected ? 'Connected' : 'Disconnected';
+    }
+}
+
+// Show notification
+function showNotification(message, type = 'info') {
+    // Your existing notification code
+    console.log(`[${type}] ${message}`);
+}
+
+// Update dashboard stats
+function updateDashboardStats(stats) {
+    // Update counters
+    document.querySelectorAll('[data-stat]').forEach(el => {
+        const stat = el.dataset.stat;
+        if (stats[stat] !== undefined) {
+            if (el.classList.contains('counter')) {
+                animateCounter(el, stats[stat]);
+            } else {
+                el.textContent = stats[stat];
+            }
+        }
+    });
+}
+
+// Animate counter
+function animateCounter(element, target) {
+    const current = parseFloat(element.textContent) || 0;
+    const increment = (target - current) / 20;
+    let value = current;
+    
+    const timer = setInterval(() => {
+        value += increment;
+        if ((increment > 0 && value >= target) || (increment < 0 && value <= target)) {
+            element.textContent = target;
+            clearInterval(timer);
+        } else {
+            element.textContent = value.toFixed(1);
+        }
+    }, 30);
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', () => {
+    initWebSocket();
+    // ... rest of your initialization code
+});
 
 // ===== INITIALIZATION =====
 document.addEventListener('DOMContentLoaded', () => {
