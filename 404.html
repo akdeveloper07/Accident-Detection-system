@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚗 AutoAccident AI - Real-time Detection System</title>
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Premium Loading Screen -->
+    <div class="loader-wrapper" id="loader">
+        <div class="loader-content">
+            <div class="loader-icon">
+                <i class="fas fa-car-side"></i>
+            </div>
+            <div class="loader-text">AutoAccident AI</div>
+            <div class="loader-progress">
+                <div class="progress-bar"></div>
+            </div>
+            <div class="loader-subtext">Initializing neural networks...</div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="app-container">
+        <!-- Animated Background -->
+        <div class="animated-bg">
+            <div class="gradient-sphere"></div>
+            <div class="gradient-sphere-2"></div>
+            <div class="grid-overlay"></div>
+        </div>
+
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" data-aos="fade-right" data-aos-duration="1000">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-car-crash"></i>
+                    <span>AutoAccident<span class="accent">AI</span></span>
+                </div>
+                <div class="status-indicator online">
+                    <span class="pulse"></span>
+                    <span class="status-text">System Online</span>
+                </div>
+            </div>
+
+            <div class="nav-menu">
+                <a href="#" class="nav-item active" data-page="dashboard">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-page="detection">
+                    <i class="fas fa-camera"></i>
+                    <span>Live Detection</span>
+                </a>
+                <a href="#" class="nav-item" data-page="history">
+                    <i class="fas fa-history"></i>
+                    <span>Alert History</span>
+                </a>
+                <a href="#" class="nav-item" data-page="analytics">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Analytics</span>
+                </a>
+                <a href="#" class="nav-item" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="connection-status">
+                    <div class="connection-dot"></div>
+                    <span id="connectionText">Connected to server</span>
+                </div>
+                <div class="server-time" id="serverTime"></div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content" id="mainContent">
+            <!-- Dashboard Page -->
+            <div class="page active" id="dashboard-page">
+                <!-- Stats Cards with Counters -->
+                <div class="stats-grid">
+                    <div class="stat-card glass" data-aos="fade-up" data-aos-delay="100">
+                        <div class="stat-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">Active Cameras</div>
+                            <div class="stat-value counter" data-target="8">0</div>
+                            <div class="stat-trend positive">
+                                <i class="fas fa-arrow-up"></i> +2 today
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card glass" data-aos="fade-up" data-aos-delay="200">
+                        <div class="stat-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">Detected Today</div>
+                            <div class="stat-value counter" data-target="24">0</div>
+                            <div class="stat-trend warning">
+                                <i class="fas fa-exclamation"></i> 3 critical
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card glass" data-aos="fade-up" data-aos-delay="300">
+                        <div class="stat-icon">
+                            <i class="fas fa-ambulance"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">Response Time</div>
+                            <div class="stat-value counter" data-target="1.8" data-decimals="1">0.0</div>
+                            <div class="stat-trend positive">
+                                <i class="fas fa-clock"></i> minutes avg
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card glass" data-aos="fade-up" data-aos-delay="400">
+                        <div class="stat-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">Accuracy</div>
+                            <div class="stat-value counter" data-target="98.5" data-decimals="1">0.0</div>
+                            <div class="stat-trend positive">
+                                <i class="fas fa-check-circle"></i> +2.3% this week
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Severity Distribution Chart -->
+                <div class="chart-container glass" data-aos="fade-up" data-aos-delay="500">
+                    <div class="chart-header">
+                        <h3>Severity Distribution</h3>
+                        <div class="chart-legend">
+                            <span class="legend-item"><span class="color-dot minor"></span> Minor</span>
+                            <span class="legend-item"><span class="color-dot major"></span> Major</span>
+                            <span class="legend-item"><span class="color-dot critical"></span> Critical</span>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="severityChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Alerts Timeline -->
+                <div class="timeline-container glass" data-aos="fade-up" data-aos-delay="600">
+                    <div class="timeline-header">
+                        <h3>Recent Alerts</h3>
+                        <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="timeline" id="alertTimeline">
+                        <!-- Alerts will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detection Page -->
+            <div class="page" id="detection-page">
+                <div class="detection-header">
+                    <h2>Live Accident Detection</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" id="startCameraBtn">
+                            <i class="fas fa-play"></i> Start Camera
+                        </button>
+                        <button class="btn btn-secondary" id="uploadVideoBtn">
+                            <i class="fas fa-upload"></i> Upload Video
+                        </button>
+                    </div>
+                </div>
+
+                <div class="detection-grid">
+                    <!-- Live Video Feed -->
+                    <div class="video-feed glass" data-aos="fade-right">
+                        <div class="video-header">
+                            <span class="feed-label">Live Feed</span>
+                            <span class="feed-status live">LIVE</span>
+                        </div>
+                        <div class="video-container" id="videoContainer">
+                            <img id="videoFeed" src="https://images.unsplash.com/photo-1519751138087-5bf79df62d5b?w=1200" alt="Live Feed">
+                            <div class="video-overlay">
+                                <div class="detection-box" id="detectionBox">
+                                    <!-- Detection boxes will be drawn here -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="video-controls">
+                            <button class="control-btn" id="captureBtn">
+                                <i class="fas fa-camera"></i>
+                            </button>
+                            <button class="control-btn" id="recordBtn">
+                                <i class="fas fa-circle"></i>
+                            </button>
+                            <button class="control-btn" id="fullscreenBtn">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Detection Metrics -->
+                    <div class="metrics-panel glass" data-aos="fade-left">
+                        <h3>Detection Metrics</h3>
+                        
+                        <div class="metric-item">
+                            <div class="metric-label">
+                                <span>Accident Status</span>
+                                <span class="metric-value" id="accidentStatus">Normal</span>
+                            </div>
+                            <div class="metric-bar">
+                                <div class="bar-fill" id="statusBar" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div class="metric-item">
+                            <div class="metric-label">
+                                <span>Severity Level</span>
+                                <span class="metric-value" id="severityLevel">None</span>
+                            </div>
+                            <div class="severity-indicator" id="severityIndicator">
+                                <div class="severity-dot minor"></div>
+                                <div class="severity-dot major"></div>
+                                <div class="severity-dot critical"></div>
+                            </div>
+                        </div>
+
+                        <div class="metric-item">
+                            <div class="metric-label">
+                                <span>Confidence</span>
+                                <span class="metric-value" id="confidenceValue">0%</span>
+                            </div>
+                            <div class="progress-circle" id="confidenceCircle">
+                                <svg viewBox="0 0 36 36">
+                                    <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                        fill="none" stroke="#444" stroke-width="3"/>
+                                    <path id="confidencePath" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                        fill="none" stroke="#4CAF50" stroke-width="3" stroke-dasharray="0, 100"/>
+                                </svg>
+                                <span class="percentage" id="confidencePercentage">0%</span>
+                            </div>
+                        </div>
+
+                        <div class="metric-item">
+                            <div class="metric-label">
+                                <span>Vehicles Detected</span>
+                                <span class="metric-value" id="vehicleCount">0</span>
+                            </div>
+                        </div>
+
+                        <!-- Severity Factors -->
+                        <div class="factors-container" id="factorsContainer">
+                            <h4>Severity Factors</h4>
+                            <div class="factor-item">
+                                <span>Overlap Area</span>
+                                <span class="factor-value" id="factorOverlap">0</span>
+                            </div>
+                            <div class="factor-item">
+                                <span>Motion Intensity</span>
+                                <span class="factor-value" id="factorMotion">0</span>
+                            </div>
+                            <div class="factor-item">
+                                <span>Debris Detection</span>
+                                <span class="factor-value" id="factorDebris">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simulation Controls -->
+                <div class="simulation-panel glass" data-aos="fade-up">
+                    <h3>Demo Simulation</h3>
+                    <div class="simulation-buttons">
+                        <button class="sim-btn minor" onclick="simulateAccident('MINOR')">
+                            <i class="fas fa-car"></i> Minor Accident
+                        </button>
+                        <button class="sim-btn major" onclick="simulateAccident('MAJOR')">
+                            <i class="fas fa-truck"></i> Major Accident
+                        </button>
+                        <button class="sim-btn critical" onclick="simulateAccident('CRITICAL')">
+                            <i class="fas fa-bomb"></i> Critical Accident
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History Page -->
+            <div class="page" id="history-page">
+                <h2>Alert History</h2>
+                <div class="history-filters">
+                    <input type="text" placeholder="Search alerts..." class="search-input">
+                    <select class="filter-select">
+                        <option>All Severities</option>
+                        <option>Minor</option>
+                        <option>Major</option>
+                        <option>Critical</option>
+                    </select>
+                    <button class="btn btn-outline" onclick="clearHistory()">
+                        <i class="fas fa-trash"></i> Clear All
+                    </button>
+                </div>
+                <div class="history-table-container glass" id="historyTable">
+                    <!-- History table will be populated -->
+                </div>
+            </div>
+
+            <!-- Analytics Page -->
+            <div class="page" id="analytics-page">
+                <h2>Analytics Dashboard</h2>
+                <div class="analytics-grid">
+                    <div class="chart-card glass">
+                        <h3>Accidents Over Time</h3>
+                        <canvas id="timeChart"></canvas>
+                    </div>
+                    <div class="chart-card glass">
+                        <h3>Severity Breakdown</h3>
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                    <div class="chart-card glass">
+                        <h3>Confidence Distribution</h3>
+                        <canvas id="confidenceChart"></canvas>
+                    </div>
+                    <div class="chart-card glass">
+                        <h3>Response Times</h3>
+                        <canvas id="responseChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Page -->
+            <div class="page" id="settings-page">
+                <h2>System Settings</h2>
+                <div class="settings-grid">
+                    <div class="settings-card glass">
+                        <h3>Detection Settings</h3>
+                        <div class="setting-item">
+                            <label>Sensitivity Threshold</label>
+                            <input type="range" min="0" max="100" value="70">
+                        </div>
+                        <div class="setting-item">
+                            <label>Min Vehicles for Alert</label>
+                            <input type="number" value="2">
+                        </div>
+                    </div>
+                    <div class="settings-card glass">
+                        <h3>Alert Settings</h3>
+                        <div class="setting-item">
+                            <label>Enable Sound Alerts</label>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label>Auto-save Evidence</label>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notification System -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
+    <script src="script.js"></script>
+</body>
+</html>
